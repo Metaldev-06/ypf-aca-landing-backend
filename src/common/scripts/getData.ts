@@ -10,7 +10,7 @@ export const getData = async () => {
   const page = await browser.newPage();
   await page.goto(url);
 
-  await page.waitForSelector('.pagination', { timeout: 60000 });
+  // await page.waitForSelector('.pagination', { timeout: 60000 });
 
   const totalPages = await page.evaluate(() => {
     const paginationItems = document.querySelectorAll(
@@ -29,7 +29,7 @@ export const getData = async () => {
   for (let i = 1; i <= totalPages; i++) {
     await page.goto(`https://serviclub.com.ar/blogs/category/page/${i}.html`);
 
-    await page.waitForSelector('.containerBen');
+    // await page.waitForSelector('.containerBen');
 
     const data = await page.evaluate(() => {
       return Array.from(document.querySelectorAll('.itemBen')).map((item) => {
