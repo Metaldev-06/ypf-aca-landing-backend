@@ -4,9 +4,8 @@ const url = 'https://serviclub.com.ar/blogs/category/page/1.html';
 
 export const getData = async () => {
   const browser = await puppeteer.launch({
-    headless: false,
-    slowMo: 100,
-    // args: ['--no-sandbox', '--disable-setuid-sandbox'],
+    headless: true,
+    args: ['--no-sandbox', '--disable-setuid-sandbox'],
   });
   const page = await browser.newPage();
   await page.goto(url);
