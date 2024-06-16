@@ -17,6 +17,8 @@ export const getData = async () => {
       await page.waitForSelector('.pagination', { timeout: 60000 });
     } catch (error) {
       console.error('Error waiting for .pagination:', error);
+      const content = await page.content();
+      console.log(content); // Imprime el contenido de la página para depuración
       throw new Error('Pagination selector not found');
     }
 
