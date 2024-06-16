@@ -10,7 +10,7 @@ export const getData = async () => {
   const page = await browser.newPage();
   await page.goto(url);
 
-  // await page.waitForSelector('.pagination', { timeout: 60000 });
+  await page.waitForSelector('.pagination', { timeout: 60000 });
 
   const totalPages = await page.evaluate(() => {
     const paginationItems = document.querySelectorAll(
