@@ -1,4 +1,7 @@
-import puppeteer from 'puppeteer';
+import puppeteer from 'puppeteer-extra';
+import StealthPlugin from 'puppeteer-extra-plugin-stealth';
+
+puppeteer.use(StealthPlugin());
 
 const url = 'https://serviclub.com.ar/blogs/category/page/1.html';
 
@@ -10,15 +13,23 @@ export const getData = async () => {
       args: ['--no-sandbox', '--disable-setuid-sandbox'],
     });
     const page = await browser.newPage();
+
+    // Set custom user agent
+    await page.setUserAgent(
+      'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+    );
+
+    // Set cookies if needed (add your own cookies here)
+    // await page.setCookie({ name: 'example', value: 'value', domain: '.example.com' });
+
     await page.goto(url, { waitUntil: 'networkidle2' });
 
-    // Aumentar el tiempo de espera y añadir manejo de errores
     try {
       await page.waitForSelector('.pagination', { timeout: 60000 });
     } catch (error) {
       console.error('Error waiting for .pagination:', error);
       const content = await page.content();
-      console.log(content); // Imprime el contenido de la página para depuración
+      console.log('Page content at error:', content); // Imprime el contenido de la página para depuración
       throw new Error('Pagination selector not found');
     }
 
@@ -40,11 +51,12 @@ export const getData = async () => {
       const pageUrl = `https://serviclub.com.ar/blogs/category/page/${i}.html`;
       await page.goto(pageUrl, { waitUntil: 'networkidle2' });
 
-      // Aumentar el tiempo de espera y añadir manejo de errores
       try {
         await page.waitForSelector('.containerBen', { timeout: 60000 });
       } catch (error) {
         console.error(`Error waiting for .containerBen on page ${i}:`, error);
+        const content = await page.content();
+        console.log(`Page content at error on page ${i}:`, content); // Imprime el contenido de la página para depuración
         continue; // O manejar el error según sea necesario
       }
 
